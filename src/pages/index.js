@@ -6,7 +6,7 @@ import ss from '@/styles/index.less';
 export default function() {
     const action = async file => {
         // 当页面加载时就应该初始化此对象
-        let ft = new FileTransfer('http://localhost:8000');
+        let ft = new FileTransfer('http://localhost:8000', true);
         // 从FileTransfer中获取URL。
         let url = ft.getUrl();
         await alert(url);

@@ -24,18 +24,18 @@ state.ws.onopen(() => {
   state.p2p = new P2P({
     handlers: {
       send_bootstrap(pk, data) {
-	let s = {
-	  from: state.p2p.get_hex_key().publicKey,
-	  to: pk,
-	  data:data,
-	}
-	state.ws.send(JSON.stringify(s));
+    let s = {
+      from: state.p2p.get_hex_key().publicKey,
+      to: pk,
+      data:data,
+    }
+    state.ws.send(JSON.stringify(s));
       },
       recv_data(pk, data) {
-	state.promises.recv_data.resolve({
-	  pk: pk,
-	  data: data,
-	})
+    state.promises.recv_data.resolve({
+      pk: pk,
+      data: data,
+    })
       }
     }
   });
@@ -54,39 +54,50 @@ state.ws.onmessage = (data) => {
 */
 
 export default class FileTransfer {
-  constructor( prefix ) {
-    this.prefix = prefix;
+    constructor( prefix, sender ) {
+        this.prefix = prefix;
 
-    this.ws = new WebSocket('ws://127.0.0.1:3000/bootstrap');
+        this.ws = new WebSocket('ws://127.0.0.1:3000/bootstrap');
 
-    this.p2p = new P2P( {
-      handlers: {
-        recv_bootstrap: (pk, data) => {
-          this.ws.send( {
-            from: this.p2p.get_hex_key().publicKey,
-            to: pk,
-            data: data,
-            op: 'signal',
-          } )
-        },
-        recv_data: (pk, data) => {
-          console.log(`receive data from ${pk}`);
+        this.p2p = new P2P( {
+            handlers: {
+                recv_bootstrap: (pk, data) => {
+                    this.ws.send( {
+                        from: this.p2p.get_hex_key().publicKey,
+                        to: pk,
+                        data: data,
+                        op: 'signal',
+                    } )
+                },
+                recv_data: (pk, data) => {
+                    console.log(`receive data from ${pk}`);
+                    if ( sender ) {
+                        // let m = JSON.parse();
+                    }
+                }
+            }
+        });
+
+        this.ws.onmessage = (data) => {
+            let m = JSON.parse(data);
+            if (m.op === 'signal') {
+                console.log(`recv signal from ${m.from}`);
+                this.p2p.recv_bootstrap(m.from, m.data );
+            }
         }
-      }
-    });
 
-    this.ws.onmessage = (data) => {
-      let m = JSON.parse(data);
-      if (m.op === 'signal') {
-        console.log(`recv signal from ${m.from}`);
-        this.p2p.recv_bootstrap(m.from, m.data );
-      }
+        this.ws.onmessage = (data) => {
+            let m = JSON.parse(data);
+            if (m.op === 'signal') {
+                console.log(`recv signal from ${m.from}`);
+                this.p2p.recv_bootstrap(m.from, m.data );
+            }
+        }
     }
-  }
 
-  getUrl(files) {
-    this.files = files;
-    return this.prefix + '/' + this.p2p.get_hex_key().publicKey;
-  }
+    getUrl(files) {
+        this.files = files;
+        return this.prefix + '/' + this.p2p.get_hex_key().publicKey;
+    }
 }
 
