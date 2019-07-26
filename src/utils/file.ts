@@ -1,4 +1,4 @@
-export default async handler(file) {
-  let r = file;
-  return cb(r);
+export default async function handler(file) {
+  console.log(file);
+  return 'link';
 }
