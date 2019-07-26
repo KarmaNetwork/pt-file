@@ -1,5 +1,5 @@
 {
-  "name": "prototype",
+  "name": "pt-file",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.27",
     "core-js": "^2.6.5",
-    "vue": "^2.6.10"
+    "simple-peer": "^9.4.0",
+    "store": "^2.0.12",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",
