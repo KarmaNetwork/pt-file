@@ -17,10 +17,10 @@ export default class Index extends React.Component {
     let ft = new FileTransfer('http://localhost:8000', true);
     this.ft = ft;
   }
-  
+
   action = async (file) => {
     // 从FileTransfer中获取URL。
-    let url = this.ft.getUrl();
+    let url = this.ft.getUrl(file);
     
     await Modal.success({
       title: '请复制此链接',

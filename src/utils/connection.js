@@ -140,6 +140,7 @@ class AlptP2P {
                     delete this.peers[pk];
                 }
             });
+            console.log(`new peer ${pk}`)
         };
 
         let peer = this.peers[pk];
