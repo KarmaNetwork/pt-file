@@ -1,5 +1,6 @@
 import P2P from './connection.js'
 
+    /*
 let state = {}
 
 state.promises = {};
@@ -49,38 +50,37 @@ state.ws.onmessage = (data) => {
     }
 }
 
+*/
+
 export default class FileTransfer {
     constructor( prefix ) {
         this.prefix = prefix;
 
-        let ws = new WebSocket();
-        this.ws = ws;
+        this.ws = new WebSocket('ws://127.0.0.1:3000/bootstrap');
 
-        let p2p = new P2P( {
+        this.p2p = new P2P( {
             handlers: {
-                recv_bootstrap(pk, data) {
-                    ws.send( {
-                        from: p2p.get_hex_key().publicKey,
+                recv_bootstrap: (pk, data) => {
+                    this.ws.send( {
+                        from: this.p2p.get_hex_key().publicKey,
                         to: pk,
                         data: data,
                         op: 'signal',
                     } )
                 },
-                recv_data(pk, data) {
-
+                recv_data: (pk, data) => {
+                    console.log(`receive data from ${pk}`);
                 }
             }
         });
 
-        ws.onmessage = (data) => {
+        this.ws.onmessage = (data) => {
             let m = JSON.parse(data);
             if (m.op == 'signal') {
                 console.log(`recv signal from ${m.from}`);
-                state.p2p.recv_bootstrap(m.from, m.data );
+                this.p2p.recv_bootstrap(m.from, m.data );
             }
         }
-
-        this.p2p = p2p;
     }
 
     getUrl(files) {
