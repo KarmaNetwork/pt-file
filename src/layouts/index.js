@@ -1,11 +1,14 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Typography, Layout } from 'antd';
+import ss from '@/styles/layout.less';
+
+const { Title } = Typography;
 
 const BasicLayout = props => {
   return (
-    <Layout>
+    <Layout className={ss.page}>
       <Layout.Header>
-	hello
+	<h1 className={ss.title}>pt-file</h1>
       </Layout.Header>
       <Layout.Content>
 	{props.children}

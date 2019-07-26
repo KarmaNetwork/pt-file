@@ -11,7 +11,7 @@ export default class Receiver extends React.Component {
     let ft = new FileTransfer('http://localhost:8000', false);
     this.ft = ft;
     let hex = this.props.location.pathname.slice(1);
-    ft.bootstrap(hex);
+    // ft.bootstrap(hex);
   }
   
   render() {

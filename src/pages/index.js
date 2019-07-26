@@ -1,10 +1,14 @@
 import React from 'react';
-import { Upload, Icon, Modal } from 'antd';
+import { Upload, Icon, Modal, Button } from 'antd';
+import copy from 'copy-to-clipboard';
 import FileTransfer from '@/utils/file';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ss from '@/styles/index.less';
 
 export default class Index extends React.Component {
   state = {
+    value: '',
+    copied: false,
     visible: false
   }
   
@@ -18,13 +22,24 @@ export default class Index extends React.Component {
     // 从FileTransfer中获取URL。
     let url = this.ft.getUrl();
     
+    await Modal.success({
+      title: '请复制此链接',
+      content: (
+	<div>{url}</div>
+      ),
+      okText: (
+	<CopyToClipboard text={url}>
+	  <div>复制</div>
+	</CopyToClipboard>
+      ),
+      maskClosable: true,
+    });
+    
     // 设置传输进度回调，
     this.ft.onprocess = (size, total) => {
       console.log(size);
       console.log(total);
     }
-
-    await alert(url);
   }
 
   onChange(info) {
@@ -50,8 +65,7 @@ export default class Index extends React.Component {
             <p className="ant-upload-drag-icon">
               <Icon type="inbox" />
             </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+            <p className="ant-upload-text">请将文件拖拽至此</p>
           </Upload.Dragger>
 	</main>
       </div>
