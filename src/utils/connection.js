@@ -54,6 +54,7 @@ class AlptP2P {
 
         peer.on('connect', () => {
             this.peers[pk].connected = true;
+            this.handlers.connected(pk);
             console.log(pk, 'is connected')
             func();
         });
@@ -107,6 +108,7 @@ class AlptP2P {
 
             peer.on('connect', () => {
                 this.peers[pk].connected = true;
+                this.handlers.connected(pk);
                 console.log(pk, 'is connected')
             });
 

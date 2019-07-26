@@ -1,6 +1,6 @@
 import P2P from './connection.js'
 
-/* 
+/*
 
 let state = {}
 
@@ -58,7 +58,7 @@ export default class FileTransfer {
         this.prefix = prefix;
 
         this.ws = new WebSocket('ws://127.0.0.1:3000/bootstrap');
-
+        this.first = false;
         this.p2p = new P2P( {
             handlers: {
                 recv_bootstrap: (pk, data) => {
@@ -69,13 +69,51 @@ export default class FileTransfer {
                         op: 'signal',
                     } )
                 },
+                connected: (pk) => {
+                    if (! sender) {
+                        let file_info = {
+                            op:'meta',
+                        }
+                        this.first = true;
+                        this.p2p.send(JSON.stringify(file_info));
+                    }
+                },
                 recv_data: (pk, data) => {
                     console.log(`receive data from ${pk}`);
                     if ( sender ) {
                         let m = JSON.parse();
-                        console.log(`receiver query data range is ${m.begin} - ${m.end}`);
+                        if (m.op === 'meta') {
+                            let file_info = {
+                                name: this.files.name,
+                                size: this.files.size,
+                                type: this.files.type,
+                            }
+                            this.p2p.send(JSON.stringify(file_info));
+                        } else if (m.op === 'query') {
+                            this.onprocess(m.begin, this.files.size);
+                            let segment = this.files.slice(m.begin, m.end);
+                            let reader = new FileReader();
+                            reader.onload( (e) => {
+                                this.p2p.send(e.target.result);
+                                this.onprocess(m.end, this.files.size);
+                            } );
+                            reader.readAsArrayBuffer(segment);
+                        }
                     } else {
+                        if (this.first) {
+                            let m = JSON.parse(data);
+                            this.file_info = m;
+                        } else {
 
+                        }
+                        if (this.first >= this.file_info.size) {
+                            let query = {
+                                op: 'query',
+                                begin: this.first === true ? 0 : this.first,
+                                end: this.file_info.size,
+                            }
+                            this.p2p.send(JSON.stringify(query));
+                        }
                     }
                 }
             }
