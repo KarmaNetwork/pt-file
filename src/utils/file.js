@@ -72,7 +72,10 @@ export default class FileTransfer {
                 recv_data: (pk, data) => {
                     console.log(`receive data from ${pk}`);
                     if ( sender ) {
-                        // let m = JSON.parse();
+                        let m = JSON.parse();
+                        console.log(`receiver query data range is ${m.begin} - ${m.end}`);
+                    } else {
+
                     }
                 }
             }
