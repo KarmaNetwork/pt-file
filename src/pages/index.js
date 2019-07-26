@@ -1,6 +1,5 @@
 import React from 'react';
-import { Upload, Icon, Modal, Button } from 'antd';
-import copy from 'copy-to-clipboard';
+import { Upload, Icon, Modal } from 'antd';
 import FileTransfer from '@/utils/file';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ss from '@/styles/index.less';
