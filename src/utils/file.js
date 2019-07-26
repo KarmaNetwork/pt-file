@@ -85,14 +85,6 @@ export default class FileTransfer {
                 this.p2p.recv_bootstrap(m.from, m.data );
             }
         }
-
-        this.ws.onmessage = (data) => {
-            let m = JSON.parse(data);
-            if (m.op === 'signal') {
-                console.log(`recv signal from ${m.from}`);
-                this.p2p.recv_bootstrap(m.from, m.data );
-            }
-        }
     }
 
     getUrl(files) {
