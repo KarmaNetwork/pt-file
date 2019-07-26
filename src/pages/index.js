@@ -1,7 +1,6 @@
 import React from 'react';
-import { Upload, Select, Icon } from 'antd';
+import { Upload, Icon } from 'antd';
 import f from '@/utils/file';
-const { Option } = Select;
 
 export default function() {
   const action = async file => {

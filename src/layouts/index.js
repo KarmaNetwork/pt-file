@@ -1,7 +1,6 @@
 import React from 'react';
-import styles from './index.css';
 
-const BasicLayout: React.FC = props => {
+const BasicLayout = props => {
   return (
     <div>
       {props.children}
