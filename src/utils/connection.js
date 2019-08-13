@@ -72,6 +72,7 @@ class AlptP2P {
         peer.on('error', (err) => {
             // delete?
             console.log(pk, 'is error')
+            console.log(err);
             delete this.peers[pk];
             if (this.peers[pk]) {
                 this.peers[pk].connected = false;
@@ -134,6 +135,7 @@ class AlptP2P {
             peer.on('error', (err) => {
                 // delete?
                 console.log(pk, 'is error')
+                console.log(err);
                 if (this.peers[pk]) {
                     this.peers[pk].connected = false;
                     this.peers[pk].peer.destroy();
